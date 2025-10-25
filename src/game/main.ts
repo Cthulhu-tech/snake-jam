@@ -41,6 +41,12 @@ const config: Phaser.Types.Core.GameConfig = {
             },
         ],
     },
+    physics: {
+        default: "arcade",
+        arcade: {
+            debug: false,
+        },
+    },
 };
 
 const StartGame = (parent: string) => {

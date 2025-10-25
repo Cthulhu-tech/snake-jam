@@ -1,7 +1,8 @@
 import { Scene } from "phaser";
-import { SpecialImage, UiImage } from "../../constant/gameImage";
+import { ItemsImage, SpecialImage, SPR, UiImage } from "../../constant/gameImage";
 import { Text } from "../../constant/gameConst";
 import { EnumGameColor } from "../../constant/gameColor";
+import { SFX } from "../../constant/gameSound";
 
 export class Preloader extends Scene {
   constructor() {
@@ -17,12 +18,28 @@ export class Preloader extends Scene {
       frameWidth: 32,
       frameHeight: 32,
     });
+    this.load.spritesheet(SpecialImage["hp-heart"], SpecialImage["hp-heart"], {
+      frameWidth: 32,
+      frameHeight: 32,
+    });
+    this.load.image(ItemsImage["item-cola"], ItemsImage["item-cola"]);
+    this.load.image(ItemsImage["item-burger"], ItemsImage["item-burger"]);
     this.load.spritesheet(SpecialImage["flag-Sheet"], SpecialImage["flag-Sheet"], {
       frameWidth: 800,
       frameHeight: 600,
     });
+
+    this.load.image(SPR.floor, SPR.floor);
+    this.load.image(SPR.eagle, SPR.eagle);
+    this.load.image(SPR.hole, SPR.hole);
+    this.load.image(SPR.snake, SPR.snake);
+    this.load.image(SPR.wall, SPR.wall);
+
     this.load.font(Text.default, "font/Metadannye-Export.ttf");
-    this.load.audio("snake-marsh", "audio/snake-marsh.mp3");
+    this.load.audio(SFX["snake-marsh"], "audio/snake-marsh.mp3");
+    this.load.audio(SFX.EagleAttack, "audio/eagle-attack.mp3");
+    this.load.audio(SFX.SnakeWin, "audio/snake-win.mp3");
+    this.load.audio(SFX.EagleHat, "audio/eagle-puts-on-a-hat.mp3");
   }
 
   create() {

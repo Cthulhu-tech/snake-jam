@@ -7,13 +7,15 @@ import { MarqueeLabel } from "../utils/marqueeLabel";
 
 export class Menu extends Scene {
   rexUI: UIPlugin;
+  private isMuted: boolean = false;
 
   constructor(key = "Menu") {
     super(key);
   }
 
   create() {
-    this.sound.add('snake-marsh').play({ loop: true, volume: 0.6 });
+    this.sound.add('snake-marsh')
+      .play({ loop: true, volume: 0.6 });
     this.anims.create({
       key: "bg-flag",
       frames: this.anims.generateFrameNumbers(SpecialImage["flag-Sheet"], { start: 0, end: 15 }),
@@ -33,15 +35,27 @@ export class Menu extends Scene {
     }).setDepth(GameDepth.UI);
 
     this.rexUI.add.label({
-      text: this.add
-        .text(470, 360, "START COMUNISSSM", {
-          fontFamily: Text.default,
-          fontSize: 24,
-          color: EnumGameColor.textColorMenu,
-        })
-        .setDepth(GameDepth.UI),
-    });
-
+      x: 540,
+      y: 375,
+      text: this.add.text(0, 0, "START COMUNISSSM", {
+        fontFamily: Text.default,
+        fontSize: 24,
+        color: EnumGameColor.textColorMenu,
+        padding: {
+          left: 30,
+          right: 15,
+          top: 15,
+          bottom: 20,
+        }
+      }),
+    })
+      .setDepth(GameDepth.UI)
+      .layout()
+      .setInteractive({ useHandCursor: true })
+      .on("pointerup", () => {
+        this.sound.get('snake-marsh').stop();
+        this.scene.start('Game');
+      });
 
     const imageSnake = this.rexUI.add.imageBox(0, 0, SpecialImage["menu-logo"], "", {
       width: 128,
@@ -72,9 +86,8 @@ export class Menu extends Scene {
         }
       });
 
-    const isMuted = this.sound.mute;
     const btn = this.add
-      .sprite(this.scale.width - 72, this.scale.height - 32, SpecialImage["sound-button"], isMuted ? 1 : 0)
+      .sprite(this.scale.width - 72, this.scale.height - 32, SpecialImage["sound-button"], this.isMuted ? 1 : 0)
       .setInteractive({ useHandCursor: true })
       .setScrollFactor(0)
       .setDepth(GameDepth.UI);
@@ -82,9 +95,8 @@ export class Menu extends Scene {
     btn.on("pointerover", () => btn.setAlpha(0.85));
     btn.on("pointerout",  () => btn.setAlpha(1));
     btn.on("pointerup", () => {
-      const newMuted = !this.sound.mute;
-      this.sound.mute = newMuted;
-      btn.setFrame(newMuted ? 1 : 0);
+      this.mutHandle();
+      btn.setFrame(this.isMuted ? 1 : 0);
     });
 
     const gameName = this.rexUI.add.label({
@@ -158,5 +170,10 @@ export class Menu extends Scene {
       .add(imageSnake, 0, 0, "left-top", { left: 220, top: 50 })
       .add(gameName, 0, 0)
       .layout();
+  }
+
+  mutHandle() {
+    this.isMuted = !this.sound.mute;
+    this.sound.mute = this.isMuted;
   }
 }
